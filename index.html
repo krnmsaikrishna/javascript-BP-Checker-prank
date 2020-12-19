@@ -1,0 +1,301 @@
+<style>
+@font-face{
+    font-family: sevensigments;
+    src: url("sevensigments.ttf");
+}
+.bpbox
+{
+width:200px;
+height:120px;
+background:black;
+padding:10px;
+display:block;
+border-radius:12px;
+background: -webkit-linear-gradient(top left ,#3377bc 0% ,#00aaff 50%,#3377bc 0%);
+}
+.fullscreen
+{
+width:180px;
+height:100px;
+display:block;
+padding:10px;
+border-radius:3px;
+box-shadow:0px 0px 10px black inset;
+background: -webkit-linear-gradient(top left ,#333333 0% ,#444444 50% ,#333333 10%);
+}
+.left
+{
+display:inline-block; 
+float:left;
+}
+.right
+{
+display:inline-block; 
+}
+.screenback
+{
+width:70px;
+height:100px;
+background:white;
+display:block;
+background-image:url('calscreen.png');
+background-size:100% 100%;
+background-position:center center;
+background-repeat:no-repeat;
+border-radius:0px;
+}
+.thumbplace
+{
+width:70px;
+height:100px;
+background:transparent;
+display:block;
+background-image:url('thumbafter.png');
+background-size:100% 100%;
+background-position:center center;
+background-repeat:no-repeat;
+box-shadow:0px 0px 5px  rgba(0,0,0,.5) inset;
+text-align:center;
+}
+.scanray
+{
+width:70px;
+height:2px;
+background:white;
+margin-top:5px;
+box-shadow:0px 0px 10px red;
+position:absolute;
+border-radius:100px;
+display:block;
+text-align:center;
+}
+.caldisplay
+{
+width:100px;
+height:25px;
+display:block;
+line-height:28px;
+font-size:13px;
+background:gray;
+background-image:url('calscreen.png');
+background-size:100% 100%;
+background-position:center center;
+background-repeat:no-repeat;
+border-radius:0px;
+box-shadow:0px 0px 5px  rgba(0,0,0,.5) inset;
+border-radius:3px;
+text-align:center;
+position:;
+margin-left:10px;
+}
+.pulsereading
+{
+width:100px;
+height:70px;
+background:black;
+display:block;
+background-image:url('pulsereading.png');
+background-size:100% 100%;
+background-position:center center;
+background-repeat:no-repeat;
+box-shadow:0px 0px 5px #000000 inset;
+text-align:bottom;
+margin-left:10px;
+margin-top:5px;
+}
+.pulsecard
+{
+width:100px;
+height:70px;
+background:black;
+display:block; 
+display:block;
+float:right;
+}
+.pulseleft
+{
+width:0;
+}
+.systolic,.diastolic,.pulse
+{
+font-family:sevensigments;
+font-weight:lighter;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+ <script>
+$(document).ready(function (){
+$("#thumbplace").on("mouseenter",function (){
+var directions="down";
+var counter=0;
+$("#scanray").attr("style","box-shadow:0px 0px 10px green;");
+function scanstart()
+{
+if (counter==7)
+{
+$("#scanray").attr("style","box-shadow:0px 0px 10px red;");
+scanstop();
+}
+if(directions=="down")
+{
+$("#scanray").animate({
+marginTop:"90px"
+},1000);
+$("#thumbplace").attr("style","background-image:url('thumbafter.png');");
+directions="up";
+}
+else
+{
+$("#scanray").animate({
+marginTop:"5px"
+},1000);
+$("#thumbplace").attr("style","background-image:url('thumbbefore.png');")
+directions="down";
+}
+counter++;
+};
+var scan=setInterval(scanstart,500);
+bpreport();
+function scanstop()
+{
+clearInterval(scan);
+
+};
+function bpreport()
+{
+var systo=90; var diasto=70; var puls=50;
+var counter=1; var flag="hide";
+var index=1; var way="right";
+var r1=Math.floor(Math.random()*(140-90+1))+90;
+var r2=Math.floor(Math.random()*(90-70+1))+70;
+var r3=Math.floor(Math.random()*(90-50+1))+50;
+function systolic()
+{
+if(systo==r1)
+{
+clearInterval(sys);
+}
+else
+{
+document.getElementById("systolic").innerHTML=systo;
+systo++;
+}
+};
+function diastolic()
+{
+if(diasto==r2)
+{
+clearInterval(dia);
+}
+else
+{
+document.getElementById("diastolic").innerHTML=diasto;
+diasto++;
+}
+};
+function pulse()
+{
+if(puls==r3)
+{
+clearInterval(pul);
+}
+else
+{
+document.getElementById("pulse").innerHTML=puls;
+puls++;
+}
+};
+function blinker()
+{
+if(counter==10)
+{
+document.getElementById("heart").innerHTML="&#9825;";
+flag="hide";
+clearInterval(blin);
+}
+if(flag=="hide")
+{
+document.getElementById("heart").innerHTML="&#9829;";
+flag="show";
+}
+else
+{
+document.getElementById("heart").innerHTML="&#9825;";
+flag="hide";
+}
+counter++;
+};
+function blinks()
+{
+var blin=setInterval(blinker,500);
+}
+
+function pulser()
+{
+if(index==9)
+{
+$("#pulsecard").css({"float":"right"});
+$("#plusecard").animate({width:"0px"},1000);
+way="right";
+clearInterval(pls);
+}
+if(way=="right")
+{
+$("#pulsecard").css({"float":"right"});
+$("#pulsecard").animate({
+width:"0px"
+},1000);
+way="left";
+}
+else
+{
+$("#pulsecard").css({"float":"left"});
+$("#pulsecard").animate({
+width:"100px"
+},1000);
+way="right";
+}
+index++;
+};
+function pulses()
+{
+var pls=setInterval(pulser,1000);
+}
+blinks();
+pulses();
+var sys=setInterval(systolic,300);
+var dia=setInterval(diastolic,300);
+var pul=setInterval(pulse,300);
+};
+});
+});
+</script>
+
+
+<div class="bpbox">
+<div class="fullscreen">
+<div class="left">
+<div class="screenback">
+<div class="thumbplace" id="thumbplace">
+<div class="scanray" id="scanray"></div>
+</div>
+</div>
+</div>
+
+<div class="right">
+
+<div class="caldisplay">
+<font class="systolic" id="systolic">120</font>
+<font class="slash" id="slash"> / </font>
+<font class="diastolic" id="diastolic"> 80 </font>
+<font class="heartsymbol" id="heart">&#9825;</font>
+<font class="pulse" id="pulse">72</font>
+</div>
+
+<div class="pulsereading">
+<div class="pulsecard" id="pulsecard"></div>
+</div>
+</div>
+</div>
+</div>
